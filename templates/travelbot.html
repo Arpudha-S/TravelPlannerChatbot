@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Travel Planner</title>
+  <style>
+    body { font-family: Arial; color:#0f7da8; background-image: url('/static/images/travel.jpg'); 
+    background-repeat: no-repeat; background-size: cover;}
+    h1 { text-align: center;}
+    h2 {text-align: center;}
+    p { font-weight:800; font-size: 20px;}
+    #quote-banner {font-size: 18px; font-style: italic; font-weight: 600; color: #0f7da8; text-align: center; animation: fadeInOut 60s infinite ease-in-out; 
+    transition: opacity 1s;}
+    @keyframes fadeInOut {0% { opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; }}
+  </style>
+</head>
+<body>
+  <h1>Welcome to VoyageVista</h1>
+  <h2>VoyageVista - A smart chatbot travel planner to plan a journey filled with beautiful sights and new perspectives.<h2>
+  <div id="quote-banner" class="quote-fade">
+    <p>Every journey tells a tale. Explore the world, one stop at a time, and let your story inspire others.</p>
+  </div>
+
+  <script src="http://localhost:5000/static/widget.js"></script>
+</body>
+</html>

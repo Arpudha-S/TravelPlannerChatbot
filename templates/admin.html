@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    body {margin: 0; display: flex; font-family: 'Inter', sans-serif; background-color: #f9f9f9; min-height: 100vh;}
+    .sidebar {width: 220px; background: lightblue; color: white; min-height: 100vh; padding: 20px;}
+    .sidebar h2 {font-size: 18px; margin-bottom: 25px; color: black; font-weight: bold;}
+    .nav-link {display: block; margin: 14px 0; color: #0f7da8; text-decoration: none; font-weight:bold;}
+    .nav-link:hover {color: white;}
+    .main {flex-grow: 1; padding: 40px;}
+    h1, h2 {margin-top: 0; color: #20294a;}
+    label {color:#0f7da8; font-weight:600;}
+
+    table {width: 100%; border-collapse: collapse; border: 1px solid black; margin-top: 20px; background-color: white; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);}
+    th, td {padding: 12px 16px; text-align: left; border-bottom: 1px solid #eee; border: 1px solid black;}
+    th {background-color: lavenderblush; font-weight: 600;}
+    td a {color: #0f7da8; text-decoration: none; font-weight:600}
+    form { max-width: 800px; margin: auto; background: #f4f4f4; padding: 10px; border-radius: 8px; }
+    .actions i {margin-right: 10px; cursor: pointer; color: #555;}
+    .actions i:hover {color: #000;}
+    .controls {display: flex; justify-content: space-between; align-items: center; margin-top: 20px;}
+    input, select {padding: 8px; width: 300px; margin: 5px 0 15px;}
+    input[type="text"] {padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 6px;}
+    ::placeholder{color:black; font-weight: 500;}
+    .btn {padding: 8px 16px; background-color: #0f7da8; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;}
+    .btn:hover {background-color: #174573;}
+    .table-title {margin-top: 30px; font-size: 20px; font-weight: 600; color:#174573}
+    .tab-content {display: none;}
+    .tab-content.visible {display: block;}
+    ul { padding-left: 20px; }
+    .status-ok {color: green;}
+    .status-fail {color: red;}
+
+    @media (max-width: 768px) {
+      .sidebar {position: relative; width: 100%; height: auto;}
+      .main {margin-left: 0;}
+    }
+    .entry { margin-bottom: 20px; }
+    .entry p { margin: 5px 0; }
+    .timestamp { font-size: 0.85em; color: black; }
+    .bot { color: #0f7da8; font-weight: 500;}
+    .user { color: #222; font-weight: bold; }
+    i {color:#222}
+  </style>
+</head>
+<body>
+<!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Travel Admin</h2>
+    <a href="javascript:void(0);" class="nav-link" onclick="showTab('travel')"><i class="fa fa-globe"></i> Travel Data</a>
+    <a href="javascript:void(0);" class="nav-link" onclick="showTab('apikeys')"><i class="fa fa-key"></i> API Keys</a>
+    <a href="javascript:void(0);" class="nav-link" onclick="showTab('chat')"><i class="fa fa-comment"></i> Chat History</a>
+    <a href="javascript:void(0);" class="nav-link" onclick="showTab('config')"><i class="fa fa-gear"></i> LLM Settings</a>
+    <a href="javascript:void(0);" class="nav-link" onclick="showTab('cache')"><i class="fa fa-database"></i> Cache</a>
+    <a href="/admin/logout" class="nav-link"><i class="fa fa-sign-out"></i> Logout</a>
+  </div>
+
+<!-- Main -->
+  <div class="main">
+    <div id="travel" class="tab-content visible">
+      <h1>Travel Data</h1>
+    <form method="GET">
+      <div class="controls">
+        <input type="text" name="search" placeholder="Search by destination..." value="{{ search }}">
+        <button type="submit" class="btn">Search</button>
+      </div>
+    </form>
+
+    <div class="table-title">Scraped Travel Info</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Place</th>
+          <th>Category</th>
+          <th>Summary</th>
+          <th>Source</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+          <td>{{ row['place'] }}</td>
+          <td>{{ row['category'] }}</td>
+          <td>{{ row['summary'][:120] }}...</td>
+          <td><a href="{{ row['source'] }}" target="_blank">View</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+<!-- API Keys Tab -->
+  <div id="apikeys" class="tab-content">
+    <h1>API Keys</h1>
+    <table>
+      <thead><tr><th>Key</th><th>Site</th><th>Expires</th><th>Enabled</th></tr></thead>
+      <tbody>
+        {% for key, info in api_keys.items() %}
+        <tr>
+          <td>{{ key }}</td>
+          <td>{{ info.site }}</td>
+          <td>{{ info.expires }}</td>
+          <td>{{ "Yes" if info.enabled else "No" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:30px;">Add New API Key</h3>
+    <form method="POST">
+      <input type="hidden" name="action" value="add_apikey">
+      <input type="text" name="key" placeholder="Key name" required><br>
+      <input type="text" name="site" placeholder="Allowed domain" required><br>
+      <input type="date" name="expires" value="2025-12-31"><br><br>
+      <button type="submit" class="btn">+ Add API Key</button>
+    </form>
+  </div>
+
+<!-- Chat History Tab -->
+  <div id="chat" class="tab-content">
+    <h1>Chat History</h1>
+
+    {% if chat_history %}
+      {% for input, output, time in chat_history %}
+      <div class="entry">
+        {% if input %}
+          <p class="user">You: {{ input }}</p>
+        {% endif %}
+        {% if output %}
+          <p class="bot">Bot: {{ output }}</p>
+        {% endif %}
+        <p class="timestamp">{{ time }}</p>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p>No chat history found.</p>
+    {% endif %}
+
+    <form method="get">
+      <input type="hidden" name="tab" value="chat">
+      <input type="text" name="session_id" placeholder="Session ID">
+      <button type="submit" class="btn">View Session</button>
+    </form>
+
+    <h4>All Sessions:</h4>
+    <ul>
+      {% for sid in sessions %}
+        <li><a href="/admin/dashboard?tab=chat&session_id={{ sid }}">{{ sid }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+
+<!-- Config Tab -->
+  <div id="config" class="tab-content">
+    <h1>LLM & Response Configuration</h1>
+    <form method="POST">
+      <input type="hidden" name="action" value="save_config">
+      <label>Out-of-Scope Message</label><br><br>
+      <textarea name="out_of_scope_message" rows="3" cols="50">{{ config.out_of_scope_message }}</textarea><br><br>
+
+      <label>Select LLM Model:</label><br><br>
+      <select name="llm_model">
+        <option value="deepseek" {% if config.llm_model == 'deepseek' %}selected{% endif %}>DeepSeek</option>
+        <option value="mistral" {% if config.llm_model == 'mistral' %}selected{% endif %}>Mistral</option>
+        <option value="gemini" {% if config.llm_model == 'gemini' %}selected{% endif %}>Gemini</option>
+      </select><br><br>
+
+      <label>
+        <input type="checkbox" name="persistent_chat_enabled" {% if config.persistent_chat_enabled %}checked{% endif %}>Enable Persistent Chat
+      </label><br><br>
+
+      <button type="submit" class="btn">Save Configuration</button>
+    </form>
+  </div>
+
+<!-- Cache Tab -->
+  <div id="cache" class="tab-content">
+    <h2>Recent Cache Entries</h2>
+    {% if recent_cache %}
+      <ul>
+        {% for entry in recent_cache %}
+          <li>{{ entry }}</li>
+          <p style="color:#0f7da8; font-weight: 600; font-size: 20px;">Tab: {{ tab }}</p>
+          <p style="color:#174573; font-weight:600;">Cache contents: {{ recent_cache }}</p>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No cache data available.</p>
+    {% endif %}
+  </div>
+
+  <script>
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(div => div.classList.remove('visible'));
+      document.getElementById(tabId).classList.add('visible');
+      const url = new URL(window.location);
+      url.searchParams.set('tab', tabId);
+      history.replaceState(null, "", url);
+    }
+    window.onload = () => {
+      showTab("{{ tab or 'travel' }}");
+    };
+  </script>
+</body>
+</html>

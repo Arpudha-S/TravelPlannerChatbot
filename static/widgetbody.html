@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Travel Planner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="http://localhost:5000/static/chatbot.css">
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-header">Travel Planner Assistant</div>
+        <div id="chatbox">
+          <div id="upload-list" style="margin: 10px 15px;"></div>
+        </div>
+        <div id="input-area">
+          <input type="text" id="input" placeholder="Ask about a destination...">
+          <button id="voice"><i class="fa fa-microphone"></i></button>
+          <button id="send"><i class="fa fa-paper-plane"></i></button>
+        </div>
+        <div id="control-bar">
+          <input type="file" id="upload-file" accept=".pdf,.docx,.png,.jpg,.jpeg" hidden/>
+          <button onclick="triggerUpload()" type="button"><i class="fa fa-upload"></i> Upload Brochure</button>
+          <button onclick="scrapeUrl()" type="button"><i class="fa fa-globe"></i> Scrape URL</button>
+          <input id="weatherCities" placeholder="Enter cities for weather forecast...">
+          <button onclick="refreshWeather()" type="button"><i class="fa fa-cloud-moon-rain"></i> View Forecast</button>
+        </div>
+        <div id="input-box">
+          <select id="model-select">
+            <option value="deepseek">DeepSeek (Default)</option>
+            <option value="mistral">Mistral</option>
+            <option value="gemini">Gemini</option>
+          </select>
+        </div>
+    </div>
+    <script>
+        const API_KEY = '{{API_KEY}}'; // From widget.js
+    </script>
+    <script src="http://localhost:5000/static/chatbotlogic.js"></script>
+</body>
+</html>

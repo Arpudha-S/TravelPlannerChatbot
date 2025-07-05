@@ -1,0 +1,17 @@
+{
+  "demo123": {
+    "site": "localhost",
+    "enabled": true,
+    "expires": "2025-12-31"
+  },
+  "travel247": {
+    "site": "localhost",
+    "enabled": true,
+    "expires": "2026-12-31"
+  },
+  "travelkey": {
+    "site": "127.0.0.1",
+    "enabled": true,
+    "expires": "2025-12-31"
+  }
+}

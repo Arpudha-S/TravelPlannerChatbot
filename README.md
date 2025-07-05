@@ -13,3 +13,20 @@ User ask question about travel to Chatbot Screen.\
 Scrapes URL from Attractions weather safety hotel web sites.\
 ![](Screenshots/scrapedurl.png)
 
+Displays weather forecast for cities.\
+![](Screenshots/weathforecast.png)
+
+Admin Login Page.\
+![](Screenshots/adminlogin.png)
+
+API keys for security and authentication.\
+![](Screenshots/apikeys.png)
+
+Chat History for entire session.\
+![](Screenshots/chathistory.png)
+
+LLM settings and bot configuration.\
+![](Screenshots/llmsettings.png)
+
+Recent cache.\
+![](Screenshots/recentcache.png)

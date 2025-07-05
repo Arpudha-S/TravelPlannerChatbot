@@ -5,9 +5,11 @@
   Python Flask\
   Vector DB - pip install chromadb , pip install sentence-transformers\
   LLM - pip install google-generativeai\
-  SQL DB - pip install pysqlite3\
+  SQL DB - pip install pysqlite3
 ## Front End
-###User ask question about travel to Chatbot Screen.\
+User ask question about travel to Chatbot Screen.\
 ![](Screenshots/chatbotquery.png)
-###Scrapes URL from Attractions weather safety hotel web sites.\
+
+Scrapes URL from Attractions weather safety hotel web sites.\
 ![](Screenshots/scrapedurl.png)
+

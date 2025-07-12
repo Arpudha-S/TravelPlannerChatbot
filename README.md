@@ -33,4 +33,4 @@ Recent cache.\
 ![](Screenshots/recentcache.png)
 
 > [!NOTE]  
-> The vector database changes depending on Python version. For Python 3.12+ use Qdrant instead of ChromaDB.
+> The vector database changes depending on Python version. For Python 3.12+ versions use Qdrant instead of ChromaDB.

@@ -5,7 +5,8 @@
   Python Flask\
   Vector DB - pip install chromadb , pip install sentence-transformers\
   LLM - pip install google-generativeai\
-  SQL DB - pip install pysqlite3
+  SQL DB - pip install pysqlite3\
+  Securely store API keys secretly in .env file
 ## Front End
 User ask question about travel to Chatbot Screen.\
 ![](Screenshots/chatbotquery.png)
@@ -30,3 +31,6 @@ LLM settings and bot configuration.\
 
 Recent cache.\
 ![](Screenshots/recentcache.png)
+
+> [!NOTE]  
+> The vector database changes depending on Python version. For Python 3.12+ use Qdrant instead of ChromaDB.
